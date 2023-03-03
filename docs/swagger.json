@@ -1,0 +1,47 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "gin 框架示例",
+        "title": "gin example",
+        "contact": {},
+        "version": "v0.0.1"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/public/user/login/{user}": {
+            "post": {
+                "description": "传入用户名,密码进行登录操作",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "用户登录接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "user",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "type": ""
+                        }
+                    },
+                    "400": {
+                        "description": "登录失败",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
