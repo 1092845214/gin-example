@@ -8,6 +8,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "github.com/yangkaiyue/gin-exp/docs"
 	"github.com/yangkaiyue/gin-exp/global"
+	"github.com/yangkaiyue/gin-exp/middleware"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -42,6 +43,9 @@ func InitRouter() {
 
 	// 默认 gin engine
 	r := gin.Default()
+
+	// 中间件
+	r.Use(middleware.Cors())
 
 	// 两个组, 一个用于鉴权的组, 一个用于非鉴权的组
 	rgPublic := r.Group("/api/v1/public")
