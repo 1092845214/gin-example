@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"github.com/yangkaiyue/gin-exp/global"
 	"os"
 	"path"
 )
@@ -19,6 +18,6 @@ func InitConf() {
 	viper.AddConfigPath(path.Join(projectPath, "conf"))
 
 	if err := viper.ReadInConfig(); err != nil {
-		global.Logger.Errorf("Load Config Error. Err: %v", err.Error())
+		panic(err.Error())
 	}
 }

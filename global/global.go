@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"time"
@@ -17,4 +18,5 @@ var (
 
 	Logger *zap.SugaredLogger
 	DB     *gorm.DB
+	RDS    *redis.Client // 在 global 准备一个 cli, 由 config.redisCli 调用
 )

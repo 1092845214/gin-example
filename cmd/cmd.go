@@ -20,11 +20,16 @@ func Start() {
 	global.Logger = config.InitLogger()
 
 	// 初始化数据库连接
-	db, err := config.InitDB()
-	global.DB = db
+	if err := config.InitMysql(); err != nil {
+		initErr = utils.AppendErr(initErr, err)
+	}
 
-	// 初始化错误处理
-	initErr = utils.AppendErr(initErr, err)
+	// 初始化redis连接
+	if err := config.InitRedis(); err != nil {
+		initErr = utils.AppendErr(initErr, err)
+	}
+
+	// 初始化错误最终处理
 	if initErr != nil {
 		if global.Logger != nil {
 			global.Logger.Errorln(initErr.Error())

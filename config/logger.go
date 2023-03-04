@@ -20,6 +20,7 @@ func InitLogger() *zap.SugaredLogger {
 	if viper.GetBool("server.debug") {
 		logMode = zapcore.DebugLevel
 	}
+
 	core := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(writeSyncer, os.Stdout), logMode)
 	return zap.New(core, zap.AddCaller()).Sugar()
 }
