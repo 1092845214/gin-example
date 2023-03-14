@@ -12,7 +12,7 @@ import (
 )
 
 type HttpCli struct {
-	Client *http.Client
+	*http.Client
 	Method string
 	URL    string
 	Body   []byte

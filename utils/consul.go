@@ -7,7 +7,7 @@ import (
 )
 
 type ConsulCli struct {
-	Cli      *consul.KV
+	Client   *consul.KV
 	URL      string
 	User     string
 	Password string
@@ -32,7 +32,7 @@ func NewConsulCli(url, user, password string) (syncer *ConsulCli, err error) {
 		URL:      url,
 		User:     user,
 		Password: password,
-		Cli:      cli.KV(),
+		Client:   cli.KV(),
 	}, nil
 }
 
@@ -40,7 +40,7 @@ func NewConsulCli(url, user, password string) (syncer *ConsulCli, err error) {
 func (sy *ConsulCli) GetKey(key string) (bool, []byte, error) {
 
 	// 请求 kv 的值
-	r, _, err := sy.Cli.Get(key, nil)
+	r, _, err := sy.Client.Get(key, nil)
 
 	// 如果 err 不为空说明请求或链接失败
 	if err != nil {
@@ -60,7 +60,7 @@ func (sy *ConsulCli) GetKey(key string) (bool, []byte, error) {
 // GetKeys 根据 pre 获取所有 key
 func (sy *ConsulCli) GetKeys(prefix, sep string) (rs []string, err error) {
 
-	keys, _, err := sy.Cli.Keys(prefix, sep, nil)
+	keys, _, err := sy.Client.Keys(prefix, sep, nil)
 
 	// 如果 err 不为空说明请求或链接失败
 	if err != nil {
@@ -92,7 +92,7 @@ func (sy *ConsulCli) PutKey(key string, value []byte) error {
 		Value: value,
 	}
 
-	if _, err := sy.Cli.Put(data, nil); err != nil {
+	if _, err := sy.Client.Put(data, nil); err != nil {
 		global.Logger.Errorf("Put Consul Key %v Failed. Err: %v", key, err.Error())
 		return err
 	}
@@ -103,7 +103,7 @@ func (sy *ConsulCli) PutKey(key string, value []byte) error {
 // DelKey 删除
 func (sy *ConsulCli) DelKey(key string) error {
 
-	if _, err := sy.Cli.Delete(key, nil); err != nil {
+	if _, err := sy.Client.Delete(key, nil); err != nil {
 		global.Logger.Errorf("Delete Consul Key %v Failed. Err: %v", key, err.Error())
 		return err
 	}

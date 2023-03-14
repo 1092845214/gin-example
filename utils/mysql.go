@@ -3,8 +3,6 @@ package utils
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"github.com/yangkaiyue/gin-exp/global"
-	"github.com/yangkaiyue/gin-exp/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -12,18 +10,23 @@ import (
 	"time"
 )
 
-func InitMysql() (err error) {
+type MysqlCli struct {
+	Client *gorm.DB
+}
+
+func NewMysqlCli(user, password, host, port, dbName string) (cli *MysqlCli, err error) {
 
 	// dsn 相关配置参数
 	// https://github.com/go-sql-driver/mysql#parameters
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local&timeout=30s",
-		viper.GetString("mysql.user"),
-		viper.GetString("mysql.password"),
-		viper.GetString("mysql.host"),
-		viper.GetString("mysql.port"),
-		viper.GetString("mysql.db_name"),
+		user,
+		password,
+		host,
+		port,
+		dbName,
 	)
 
+	// Set Log Level
 	logMode := logger.Error
 	if viper.GetBool("server.debug") {
 		logMode = logger.Info
@@ -31,8 +34,8 @@ func InitMysql() (err error) {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   "epoch_",
-			SingularTable: true,
+			TablePrefix:   "epoch_", // 前缀
+			SingularTable: true,     // 单数表
 		},
 		Logger: logger.Default.LogMode(logMode),
 	})
@@ -46,9 +49,9 @@ func InitMysql() (err error) {
 	db2.SetConnMaxLifetime(time.Hour)
 
 	// 如果表不存在则创建
-	db.AutoMigrate(&model.User{})
+	//db.AutoMigrate(&model.User{})
 
-	// 赋值,如果
-	global.DB = db
-	return
+	return &MysqlCli{
+		Client: db,
+	}, nil
 }
