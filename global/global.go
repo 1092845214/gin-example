@@ -1,9 +1,9 @@
 package global
 
 import (
-	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
+	"os"
+	"path"
 	"time"
 )
 
@@ -14,9 +14,12 @@ const (
 )
 
 var (
+	exePath, _  = os.Executable()
+	ProjectPath = path.Dir(path.Dir(exePath))
+
 	CstZone = time.FixedZone("CST", 8*3600)
 
 	Logger *zap.SugaredLogger
-	DB     *gorm.DB
-	RDS    *redis.Client // 在 global 准备一个 cli, 由 config.redisCli 调用
+	//DB     *gorm.DB
+	//RDS    *redis.Client // 在 global 准备一个 cli, 由 config.redisCli 调用
 )

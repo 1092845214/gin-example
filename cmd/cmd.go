@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"github.com/yangkaiyue/gin-exp/config"
+	"github.com/yangkaiyue/gin-exp/cron"
 	"github.com/yangkaiyue/gin-exp/global"
 	"github.com/yangkaiyue/gin-exp/router"
-	"github.com/yangkaiyue/gin-exp/utils"
 )
 
 func Start() {
@@ -19,15 +19,19 @@ func Start() {
 	// 初始化日志组件
 	global.Logger = config.InitLogger()
 
-	// 初始化数据库连接
-	if err := config.InitMysql(); err != nil {
-		initErr = utils.AppendErr(initErr, err)
-	}
+	// 启动后台进程
+	cron.CrontabJob()
 
-	// 初始化redis连接
-	if err := config.InitRedis(); err != nil {
-		initErr = utils.AppendErr(initErr, err)
-	}
+	// 只连一个库的话可以在这里初始化, 或者在 service 中针对不同请求进行连接
+	//// 初始化数据库连接
+	//if err := utils.InitMysql(); err != nil {
+	//	initErr = utils.AppendErr(initErr, err)
+	//}
+	//
+	//// 初始化redis连接
+	//if err := utils.InitRedis(); err != nil {
+	//	initErr = utils.AppendErr(initErr, err)
+	//}
 
 	// 初始化错误最终处理
 	if initErr != nil {
@@ -49,5 +53,5 @@ func Start() {
 
 func Clean() {
 
-	global.Logger.Infoln("=======clean==========")
+	global.Logger.Infoln("===== Stop Server =====")
 }

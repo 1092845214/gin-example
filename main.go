@@ -1,6 +1,8 @@
 package main
 
-import "github.com/yangkaiyue/gin-exp/cmd"
+import (
+	"github.com/yangkaiyue/gin-exp/cmd"
+)
 
 // @title  gin example
 // @version v0.0.1

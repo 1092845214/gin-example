@@ -22,7 +22,9 @@ func InitLogger() *zap.SugaredLogger {
 	}
 
 	core := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(writeSyncer, os.Stdout), logMode)
-	return zap.New(core, zap.AddCaller()).Sugar()
+	return zap.New(core, zap.AddCaller()).
+		WithOptions(zap.AddCallerSkip(2)).
+		Sugar()
 }
 
 func getEncoder() zapcore.Encoder {
@@ -37,12 +39,13 @@ func getEncoder() zapcore.Encoder {
 		encoder.AppendString(t.In(global.CstZone).Format(global.DateTimeFormat))
 	}
 
-	return zapcore.NewJSONEncoder(cfg)
+	//return zapcore.NewJSONEncoder(cfg)
+	return zapcore.NewConsoleEncoder(cfg)
 }
 
 func getWriteSyncer() zapcore.WriteSyncer {
 
-	logFile := path.Join(projectPath, "log", time.Now().In(global.CstZone).Format(global.DateOnlyFormat))
+	logFile := path.Join(global.ProjectPath, "log", time.Now().In(global.CstZone).Format(global.DateOnlyFormat))
 
 	// 日志切割使用 lumberjack
 	lumberjackSyncer := &lumberjack.Logger{

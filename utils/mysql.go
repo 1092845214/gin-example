@@ -1,9 +1,10 @@
-package config
+package utils
 
 import (
 	"fmt"
 	"github.com/spf13/viper"
 	"github.com/yangkaiyue/gin-exp/global"
+	"github.com/yangkaiyue/gin-exp/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -45,7 +46,7 @@ func InitMysql() (err error) {
 	db2.SetConnMaxLifetime(time.Hour)
 
 	// 如果表不存在则创建
-	//db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.User{})
 
 	// 赋值,如果
 	global.DB = db

@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/yangkaiyue/gin-exp/global"
 )
 
 type User struct{}
@@ -17,8 +18,13 @@ type User struct{}
 // @Failure 400 {} string "登录失败"
 // @Router /public/user/login/{user} [POST]
 func (m *User) Login(ctx *gin.Context) {
-	resp := &ResponseJson{
-		Msg: "Login Success",
+
+	global.Logger.Info("User Login")
+
+	resp := &global.ResponseJson{
+		Head: global.Head{
+			Msg: "Login Success",
+		},
 	}
 	resp.Success(ctx)
 }
